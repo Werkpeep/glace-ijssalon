@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glacé – Ambachtelijk IJs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #FFF9F5;
+      --bg-alt: #FFF1E8;
+      --text: #2D1E16;
+      --text-muted: #6B5344;
+      --primary: #C41E3A;
+      --primary-dark: #9B1830;
+      --accent: #E85A4F;
+      --teal: #2A9D8F;
+      --cream: #FFF3B0;
+      --white: #FFFFFF;
+      --radius: 16px;
+      --shadow: 0 8px 30px rgba(45, 30, 22, 0.08);
+      --shadow-hover: 0 16px 40px rgba(45, 30, 22, 0.12);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --max-w: 1120px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    .container {
+      width: min(100% - 2.5rem, var(--max-w));
+      margin-inline: auto;
+    }
+
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); }
+    h2 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); }
+    h3 { font-size: 1.25rem; }
+
+    .eyebrow {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.6rem;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.85rem 1.6rem;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .btn-primary { background: var(--primary); color: var(--white); }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: var(--shadow); }
+    .btn-ghost { background: transparent; border-color: var(--text); color: var(--text); }
+    .btn-ghost:hover { background: var(--text); color: var(--white); }
+    .btn-small {
+      padding: 0.5rem 1.2rem;
+      font-size: 0.875rem;
+      background: var(--primary);
+      color: var(--white);
+      border-radius: 999px;
+    }
+    .btn-small:hover { background: var(--primary-dark); }
+
+    /* HEADER */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(255, 249, 245, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .header.scrolled {
+      border-color: rgba(45, 30, 22, 0.08);
+      box-shadow: 0 2px 20px rgba(45, 30, 22, 0.06);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 700;
+    }
+    .logo span { color: var(--primary); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .nav-links a:not(.btn) {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:not(.btn):hover { color: var(--primary); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      transition: all 0.3s;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 72px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(232, 90, 79, 0.12), transparent),
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(42, 157, 143, 0.1), transparent),
+        var(--bg);
+      z-index: 0;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      padding: 4rem 0 5rem;
+    }
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin: 1.4rem 0 2.2rem;
+      max-width: 520px;
+    }
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    /* SECTIONS */
+    .section { padding: 5.5rem 0; }
+    .section-alt { background: var(--bg-alt); }
+    .section-header {
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto 3.5rem;
+    }
+    .section-desc {
+      color: var(--text-muted);
+      margin-top: 0.8rem;
+      font-size: 1.05rem;
+    }
+
+    /* FLAVORS */
+    .flavors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .flavor-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .flavor-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+    .flavor-card.featured { border: 2px solid var(--primary); }
+    .flavor-img {
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+    }
+    .flavor-body {
+      padding: 1.4rem 1.5rem 1.6rem;
+      position: relative;
+    }
+    .flavor-body h3 { margin-bottom: 0.4rem; }
+    .flavor-body p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .tags span {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.3rem 0.7rem;
+      background: var(--bg-alt);
+      border-radius: 999px;
+      color: var(--text-muted);
+    }
+    .badge {
+      position: absolute;
+      top: -12px;
+      right: 1.2rem;
+      background: var(--primary);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* SPLIT */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+    .split-text p {
+      color: var(--text-muted);
+      margin: 1rem 0 1.5rem;
+    }
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-weight: 500;
+    }
+    .checklist li::before {
+      content: "✓";
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background: var(--teal);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+    .split-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.2rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .stat-num {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.3rem;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* PROCESS */
+    .process {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    .process-step {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.8rem 1.4rem;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: transform 0.25s;
+    }
+    .process-step:hover { transform: translateY(-4px); }
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      opacity: 0.3;
+      margin-bottom: 0.6rem;
+    }
+    .process-step h3 { margin-bottom: 0.5rem; }
+    .process-step p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* VALUES */
+    .values {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .value-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem 1.6rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .value-icon {
+      font-size: 2.2rem;
+      margin-bottom: 0.8rem;
+    }
+    .value-card h3 { margin-bottom: 0.5rem; }
+    .value-card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    /* CTA */
+    .cta-section { padding-bottom: 6rem; }
+    .cta-box {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 24px;
+      padding: 3.5rem 2rem;
+      text-align: center;
+      color: white;
+    }
+    .cta-box h2 { color: white; margin-bottom: 0.8rem; }
+    .cta-box > p {
+      opacity: 0.9;
+      max-width: 440px;
+      margin: 0 auto 1.8rem;
+    }
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .cta-box .btn-primary { background: white; color: var(--primary); }
+    .cta-box .btn-primary:hover { background: var(--cream); }
+    .cta-box .btn-ghost {
+      border-color: rgba(255,255,255,0.6);
+      color: white;
+    }
+    .cta-box .btn-ghost:hover {
+      background: white;
+      color: var(--primary);
+    }
+    .cta-note {
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    /* FOOTER */
+    .footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.7);
+      padding: 3rem 0 2rem;
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+    .footer .logo {
+      color: white;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    .footer-brand p { font-size: 0.9rem; }
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .footer-links a {
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: white; }
+    .copyright {
+      width: 100%;
+      text-align: center;
+      font-size: 0.8rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .split { grid-template-columns: 1fr; gap: 2.5rem; }
+      .process { grid-template-columns: 1fr 1fr; }
+      .values { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      .nav-links {
+        position: fixed;
+        top: 72px;
+        left: 0;
+        right: 0;
+        background: var(--bg);
+        flex-direction: column;
+        padding: 1.5rem;
+        gap: 1rem;
+        border-bottom: 1px solid rgba(45,30,22,0.08);
+        transform: translateY(-120%);
+        opacity: 0;
+        transition: all 0.3s ease;
+        pointer-events: none;
+      }
+      .nav-links.open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: all;
+      }
+      .hamburger { display: flex; }
+      .process { grid-template-columns: 1fr; }
+      .hero-content { padding: 3rem 0 4rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <header class="header" id="header">
+    <div class="container nav">
+      <a href="#" class="logo">Glacé<span>.</span></a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#smaken">Smaken</a>
+        <a href="#ambacht">Ambacht</a>
+        <a href="#recepten">Recepten</a>
+        <a href="#verhaal">Ons verhaal</a>
+        <a href="#contact" class="btn btn-small">Contact</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-content">
+      <p class="eyebrow">Ambachtelijk • Wetenschappelijk • Lekker</p>
+      <h1>IJs met karakter.<br />Gemaakt met precisie.</h1>
+      <p class="hero-sub">
+        Bij Glacé combineren we klassieke ambacht met exacte receptberekeningen.
+        Elke lepel is het resultaat van percentages, passie en perfectie.
+      </p>
+      <div class="hero-cta">
+        <a href="#smaken" class="btn btn-primary">Ontdek onze smaken</a>
+        <a href="#ambacht" class="btn btn-ghost">Hoe wij werken</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SMAKEN -->
+  <section class="section" id="smaken">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow">De collectie</p>
+        <h2>Onze signature smaken</h2>
+        <p class="section-desc">Elke smaak is berekend tot op de gram. Suiker, vet, VVMB en POD/PAC in perfecte balans.</p>
+      </div>
+      <div class="flavors-grid">
+        <article class="flavor-card">
+          <div class="flavor-img" style="background: linear-gradient(135deg, #f8e8c8, #f5d0a9);">🍦</div>
+          <div class="flavor-body">
+            <h3>Klassieke Vanille</h3>
+            <p>Madagascar vanille, room 35%, perfecte 16,5% suiker. De basis van alles.</p>
+            <div class="tags"><span>Suiker 16,5%</span><span>Vet 8%</span><span>POD 180</span></div>
+          </div>
+        </article>
+        <article class="flavor-card">
+          <div class="flavor-img" style="background: linear-gradient(135deg, #3d2314, #6b3a2a);">🍫</div>
+          <div class="flavor-body">
+            <h3>Intense Chocolade</h3>
+            <p>Cacao 22-24% + 70% chocolade. Diep, romig en precies gebalanceerd.</p>
+            <div class="tags"><span>Suiker 16%</span><span>Vet 9%</span><span>PAC 230</span></div>
+          </div>
+        </article>
+        <article class="flavor-card">
+          <div class="flavor-img" style="background: linear-gradient(135deg, #ff6b6b, #ee5a5a);">🍓</div>
+          <div class="flavor-body">
+            <h3>Aardbei</h3>
+            <p>Verse aardbeienpuree, gecompenseerd voor water en natuurlijke suikers.</p>
+            <div class="tags"><span>Fruit 18%</span><span>VVMB 10%</span><span>Fris</span></div>
+          </div>
+        </article>
+        <article class="flavor-card">
+          <div class="flavor-img" style="background: linear-gradient(135deg, #c4a574, #a67c52);">🌰</div>
+          <div class="flavor-body">
+            <h3>Hazelnoot</h3>
+            <p>Ambachtelijke hazelnootpasta. Hoog vet, lage wateractiviteit, maximale smaak.</p>
+            <div class="tags"><span>Noten 10%</span><span>Vet 11%</span><span>Romig</span></div>
+          </div>
+        </article>
+        <article class="flavor-card">
+          <div class="flavor-img" style="background: linear-gradient(135deg, #f9c74f, #f9844a);">🥭</div>
+          <div class="flavor-body">
+            <h3>Mango-Passie</h3>
+            <p>Tropisch duo met hoge natuurlijke suiker en perfecte PAC-waarde.</p>
+            <div class="tags"><span>Tropisch</span><span>PAC 240</span><span>Zomers</span></div>
+          </div>
+        </article>
+        <article class="flavor-card featured">
+          <div class="flavor-img" style="background: linear-gradient(135deg, #9b5de5, #f15bb5);">✨</div>
+          <div class="flavor-body">
+            <span class="badge">Signature</span>
+            <h3>Jouw favoriet?</h3>
+            <p>Elke maand een nieuwe limited edition, berekend en getest tot perfectie.</p>
+            <div class="tags"><span>Limited</span><span>Seizoensgebonden</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- AMBACHT -->
+  <section class="section section-alt" id="ambacht">
+    <div class="container">
+      <div class="split">
+        <div class="split-text">
+          <p class="eyebrow">Onze methode</p>
+          <h2>Wetenschap in elke lepel</h2>
+          <p>
+            Wij geloven dat perfect ijs geen toeval is. Daarom berekenen we elk recept tot op de gram:
+            suikerpercentage, vet, VVMB, overige droge stof, POD en PAC.
+          </p>
+          <ul class="checklist">
+            <li>Exacte receptencalculator (eigen software)</li>
+            <li>Controle op textuur & smeltweerstand</li>
+            <li>Alleen hoogwaardige grondstoffen</li>
+            <li>Kleine batches, maximale versheid</li>
+          </ul>
+        </div>
+        <div class="split-cards">
+          <div class="stat-card"><span class="stat-num">16,5%</span><span class="stat-label">Ideale suiker</span></div>
+          <div class="stat-card"><span class="stat-num">8%</span><span class="stat-label">Perfect vet</span></div>
+          <div class="stat-card"><span class="stat-num">35%</span><span class="stat-label">Totaal droge stof</span></div>
+          <div class="stat-card"><span class="stat-num">180</span><span class="stat-label">POD-waarde</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section" id="recepten">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow">Van idee tot ijs</p>
+        <h2>Hoe een Glacé-recept ontstaat</h2>
+      </div>
+      <div class="process">
+        <div class="process-step">
+          <div class="step-num">01</div>
+          <h3>Doelen stellen</h3>
+          <p>We bepalen suiker, vet, VVMB, POD en PAC voor de gewenste textuur en zoetheid.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">02</div>
+          <h3>Berekenen</h3>
+          <p>Met onze receptencalculator vertalen we percentages naar exacte grammen per ingrediënt.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">03</div>
+          <h3>Testen</h3>
+          <p>Kleine batches, proeven, bijsturen. Tot de Δ-waarden bijna nul zijn.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">04</div>
+          <h3>Perfectie</h3>
+          <p>Pas als smaak, textuur en stabiliteit kloppen, gaat het recept in de vaste collectie.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VERHAAL -->
+  <section class="section section-alt" id="verhaal">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow">Wie we zijn</p>
+        <h2>Studenten met een missie</h2>
+        <p class="section-desc">
+          Wij zijn een team van 6BCW-studenten dat wetenschap en ambacht combineert.
+          Wat begon als een schoolopdracht, groeide uit tot een echte passie voor perfect ijs.
+        </p>
+      </div>
+      <div class="values">
+        <div class="value-card">
+          <div class="value-icon">🔬</div>
+          <h3>Precisie</h3>
+          <p>Elk percentage telt. We meten, berekenen en testen tot het klopt.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🌿</div>
+          <h3>Kwaliteit</h3>
+          <p>Alleen de beste ingrediënten. Geen onnodige toevoegingen.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">❤️</div>
+          <h3>Passie</h3>
+          <p>We maken ijs omdat we het écht graag doen – en dat proef je.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section cta-section" id="contact">
+    <div class="container cta-box">
+      <h2>Klaar om te proeven?</h2>
+      <p>Volg ons voor nieuwe smaken, behind-the-scenes en updates over onze ijssalon.</p>
+      <div class="cta-buttons">
+        <a href="mailto:info@glace-ijs.be" class="btn btn-primary">Mail ons</a>
+        <a href="#smaken" class="btn btn-ghost">Bekijk smaken</a>
+      </div>
+      <p class="cta-note">Glacé • Ambachtelijk ijs met wetenschappelijke precisie</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="#" class="logo">Glacé<span>.</span></a>
+        <p>Ambachtelijk ijs, berekend tot perfectie.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#smaken">Smaken</a>
+        <a href="#ambacht">Ambacht</a>
+        <a href="#recepten">Methode</a>
+        <a href="#verhaal">Verhaal</a>
+      </div>
+      <p class="copyright">© 2026 Glacé – Schoolproject 6BCW</p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // Header scroll
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 40);
+    });
+  </script>
+</body>
+</html>
